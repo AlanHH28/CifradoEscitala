@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escítala</title>
+    <link rel="stylesheet" href="Estilos.css"> <!-- Vincula el archivo de estilos CSS -->
+</head>
+<body>
+    <header>
+        <h1>Cifrado de transposición a través de Escítala</h1>
+    </header>
+    <div class="form-container">
+        
+            <label for="mensaje">Ingrese el texto:</label>
+            <input type="text" id="mensaje" /><br>
+            <label for="clave">Num. Columnas:</label>
+            <input type="number" id="clave" /><br>
+            <button onclick="cifrar()" id="boton">Cifrar</button>
+            <button onclick="descifrar()" id="boton">Descifrar</button>
+            <div id="resultado"></div>
+       
+        
+    </div>
+
+    <script >
+        function cifrar() {
+    let mensaje = document.getElementById('mensaje').value;
+    let columnas = parseInt(document.getElementById('clave').value);
+    let resultado = '';
+    let matriz = [];
+
+   
+    for (let i = 0; i < Math.ceil(mensaje.length / columnas); i++) {
+        matriz.push([]);
+        for (let j = 0; j < columnas; j++) {
+            matriz[i].push(' ');
+        }
+    }
+    let cont = 0;
+
+
+    for (let i = 0; i < Math.ceil(mensaje.length / columnas); i++) {
+        for (let j = 0; j < columnas; j++) {
+            matriz[i][j] = mensaje[cont] || ' ';
+            cont++;
+        }
+    }
+
+
+    for (let i = 0; i < columnas; i++) {
+        for (let j = 0; j < Math.ceil(mensaje.length / columnas); j++) {
+            if (matriz[j][i] !== ' ') {
+                resultado += matriz[j][i];
+            } else {
+                resultado += ' ';
+            }
+        }
+    }
+
+    let matrizHTML = '<p>Matriz:</p><table>';
+    for (let i = 0; i < Math.ceil(mensaje.length / columnas); i++) {
+        matrizHTML += '<tr>';
+        for (let j = 0; j < columnas; j++) {
+            matrizHTML += '<td>' + matriz[i][j] + '</td>';
+        }
+        matrizHTML += '</tr>';
+    }
+    matrizHTML += '</table>';
+    document.getElementById('resultado').innerHTML = matrizHTML + '<p>Resultado cifrado: ' + resultado + '</p>';
+}
+
+
+function descifrar() {
+    let mensaje = document.getElementById('mensaje').value;
+    let columnas = parseInt(document.getElementById('clave').value);
+    let resultado = '';
+    let matriz = [];
+
+    // Crear la matriz
+    for (let i = 0; i < Math.ceil(mensaje.length / columnas); i++) {
+        matriz.push([]);
+        for (let j = 0; j < columnas; j++) {
+            matriz[i].push(' ');
+        }
+    }
+
+    let cont = 0;
+
+    // Llenar la matriz con el mensaje cifrado
+    for (let i = 0; i < columnas; i++) {
+        for (let j = 0; j < Math.ceil(mensaje.length / columnas); j++) {
+            matriz[j][i] = mensaje[cont] || ' ';
+            cont++;
+        }
+    }
+
+    // Construir el mensaje descifrado
+    for (let i = 0; i < Math.ceil(mensaje.length / columnas); i++) {
+        for (let j = 0; j < columnas; j++) {
+            resultado += matriz[i][j];
+        }
+    }
+
+    document.getElementById('resultado').innerHTML = '<p>Resultado descifrado: ' + resultado + '</p>';
+}
+
+
+    </script>
+</body>
+</html>
